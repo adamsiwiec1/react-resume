@@ -1,21 +1,12 @@
 import React, { Component } from "react";
 import { Fade, Slide } from "react-reveal";
-import axios from "axios";
+
 
 var nodemailer = require('nodemailer');
 
 
-class Contact extends Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      name: '',
-      email: '',
-      subject:'',
-      message: ''
-    }
-  }
+class Contact extends Component {
 
   render() {
     if (!this.props.data) return null;
@@ -108,7 +99,10 @@ class Contact extends Component {
                   </div>
 
                   <div>
+                    {/* <a href='http://localhost:3000'> */}
                     <button type='submit' value='submit'>Submit</button>
+                    {/* </a> */}
+
 
 
 
@@ -132,11 +126,11 @@ class Contact extends Component {
 
               {/* ## Message Warning ##  */}
 
-              {/* <div id="message-warning"> Error boy</div>
+              <div id="message-warning"> Error boy</div>
               <div id="message-success">
                 <i className="fa fa-check"></i>Your message was sent, thank you!
                 <br />
-              </div> */}
+              </div>
 
 
             </div>

@@ -9,6 +9,7 @@ const app = express();
 //make the contact page the the first page on the app
 app.route("/").get(function (req, res) {
   res.sendFile(process.cwd() + "/public/index.html");
+  // res.redirect('public/index.html')
 });
 
 //port will be 5000 for testing
@@ -21,8 +22,8 @@ const transporter = nodemailer.createTransport({
     host: "smtp.gmail.com", //replace with your email provider
     port: 587,
     auth: {
-      user: 'adam@siwiectech.com',
-      pass: 'Sonny51299?',
+      user: 'adam2.siwiec@gmail.com',
+      pass: 'BeachWork123#!',
     },
   });
 
@@ -47,8 +48,8 @@ transporter.verify(function (error, success) {
   
       //2. You can configure the object however you want
       const mail = {
-        from: data.contactEmail,
-        to: 'adam@siwiectech.com',
+        from: 'adam2.siwiec@gmail.com',
+        to: data.contactEmail,
         subject: data.contactSubject,
         text: `${data.contactName} <${data.contactMessage}>`,
       };
@@ -59,8 +60,9 @@ transporter.verify(function (error, success) {
           console.log(err);
           res.status(500).send("Something went wrong.");
         } else {
-          res.status(200).send("Email successfully sent to recipient!");
+          res.status(200).send("Email successfully sent to recipient!"); 
         }
       });
     });
+    return res.redirect('http://localhost:3000/#home');
   });
