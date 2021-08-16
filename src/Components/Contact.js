@@ -1,23 +1,45 @@
 import React, { Component } from "react";
 import { Fade, Slide } from "react-reveal";
-
-
-var nodemailer = require('nodemailer');
-
-
+import axios from "axios";
 
 class Contact extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      contactName: '',
+      contactEmail: '',
+      contactSubject: '',
+      contactMessage: ''
+    }
+  }
+
+  onNameChange(event) {
+    this.setState({contactName: event.target.value})
+  }
+  onEmailChange(event) {
+      this.setState({contactEmail: event.target.value})
+  }
+
+  onSubjectChange(event) {
+      this.setState({contactSubject: event.target.value})
+  }
+
+  onMsgChange(event) {
+      this.setState({contactMessage: event.target.value})
+  }
 
   render() {
     if (!this.props.data) return null;
 
+
     const name = this.props.data.name;
     const street = this.props.data.address.street;
     const city = this.props.data.address.city;
-    const state = this.props.data.address.state;
+    const st = this.props.data.address.state;
     const zip = this.props.data.address.zip;
     const phone = this.props.data.phone;
-    const message = this.props.data.contactmessage;
+    const message = this.props.data.message;
 
     return (
       <section id="contact">
@@ -39,12 +61,7 @@ class Contact extends Component {
           <Slide left duration={1000}>
             <div className="eight columns">
 
-
-
-
-
-
-              <form id='contactForm' method='POST' action='send' encType='multipart/form-data'>
+              <form id="contactForm" onSubmit={this.submitEmail.bind(this)} method="POST">
                 <fieldset>
                   <div>
                     <label htmlFor="contactName">
@@ -56,7 +73,8 @@ class Contact extends Component {
                       size="35"
                       id="contactName"
                       name="contactName"
-                      onChange={this.handleChange}
+                      required value={this.state.contactName}
+                      onChange={this.onNameChange.bind(this)}
                     />
                   </div>
 
@@ -70,7 +88,8 @@ class Contact extends Component {
                       size="35"
                       id="contactEmail"
                       name="contactEmail"
-                      onChange={this.handleChange}
+                      required value={this.state.contactEmail}
+                      onChange={this.onEmailChange.bind(this)}
                     />
                   </div>
 
@@ -82,7 +101,8 @@ class Contact extends Component {
                       size="35"
                       id="contactSubject"
                       name="contactSubject"
-                      onChange={this.handleChange}
+                      required value={this.state.contactSubject}
+                      onChange={this.onSubjectChange.bind(this)}
                     />
                   </div>
 
@@ -95,50 +115,18 @@ class Contact extends Component {
                       rows="15"
                       id="contactMessage"
                       name="contactMessage"
+                      required value={this.state.contactMessage}
+                      onChange={this.onMsgChange.bind(this)}
                     ></textarea>
                   </div>
-
                   <div>
-                    {/* <a href='http://localhost:3000'> */}
-                    <button type='submit' value='submit'>Submit</button>
-                    {/* </a> */}
+                    <button type='submit'>Submit</button>
 
-
-
-
-                    <span id="image-loader">
-                      <img alt="" src="images/loader.gif" />
-                    </span>
                   </div>
                 </fieldset>
               </form>
-
-
-
-
-
-
-
-
-
-
-
-
-              {/* ## Message Warning ##  */}
-
-              <div id="message-warning"> Error boy</div>
-              <div id="message-success">
-                <i className="fa fa-check"></i>Your message was sent, thank you!
-                <br />
-              </div>
-
-
             </div>
           </Slide>
-
-
-
-
           <Slide right duration={1000}>
             <aside className="four columns footer-widgets">
               <div className="widget widget_contact">
@@ -147,7 +135,7 @@ class Contact extends Component {
                   {name}
                   <br />
                   {street} <br />
-                  {city}, {state} {zip}
+                  {city}, {st} {zip}
                   <br />
                   <span>{phone}</span>
                 </p>
@@ -158,9 +146,30 @@ class Contact extends Component {
         
       </section>
     );
-  }
-}
 
+  }
+
+
+
+  submitEmail(e){
+    e.preventDefault();
+    axios({
+      method: "POST", 
+      url:"/send", 
+      data:  this.state
+    }).then((response)=>{
+      if (response.data.status === 'success'){
+          alert("Message Sent."); 
+          this.resetForm()
+      }else if(response.data.status === 'fail'){
+          alert("Message failed to send.")
+      }
+    })
+  };
+    resetForm() {
+      this.setState({contactName: '', contactEmail: '',contactSubject:'', contactMessage: ''})
+    };
+}
 
 
 export default Contact;

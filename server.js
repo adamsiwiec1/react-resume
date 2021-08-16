@@ -1,34 +1,29 @@
-const express = require("express");
-const nodemailer = require("nodemailer");
-const multiparty = require("multiparty");
-const { AuditManager } = require("aws-sdk");
-require("dotenv").config();
-
+const express = require('express');
+const nodemailer = require('nodemailer');
+const cors = require('cors');
+require('dotenv').config()
 const app = express();
+var bodyParser = require('body-parser')
+app.use( bodyParser.json() );  
+app.use(bodyParser.urlencoded({
+  extended: true
+})); 
 
-//make the contact page the the first page on the app
-app.route("/").get(function (req, res) {
-  res.sendFile(process.cwd() + "/public/index.html");
-  // res.redirect('public/index.html')
-});
-
-//port will be 5000 for testing
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}...`);
 });
 
 const transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com", //replace with your email provider
+    host: "smtp.gmail.com",
     port: 587,
     auth: {
-      user: 'adam2.siwiec@gmail.com',
-      pass: 'BeachWork123#!',
+      user: process.env.EMAIL,
+      pass: process.env.PASS,
     },
   });
 
-  // verify connection configuration
-transporter.verify(function (error, success) {
+  transporter.verify(function(error, success) {
     if (error) {
       console.log(error);
     } else {
@@ -36,33 +31,29 @@ transporter.verify(function (error, success) {
     }
   });
 
-  app.post("/send", (req, res) => {
-    //1.
-    let form = new multiparty.Form();
-    let data = {};
-    form.parse(req, function (err, fields) {
-      console.log(fields);
-      Object.keys(fields).forEach(function (property) {
-        data[property] = fields[property].toString();
-      });
+  app.post('/send', (req, res, next) => {
+    console.log(req.body)
+    var name = req.body.contactName
+    var email = req.body.contactEmail
+    var subject = req.body.contactSubject
+    var message = req.body.contactMessage
   
-      //2. You can configure the object however you want
-      const mail = {
-        from: 'adam2.siwiec@gmail.com',
-        to: data.contactEmail,
-        subject: data.contactSubject,
-        text: `${data.contactName} <${data.contactMessage}>`,
-      };
+    var mail = {
+      from: name,
+      to: email,
+      subject: subject,
+      text: message
+    }
   
-      //3.
-      transporter.sendMail(mail, (err, data) => {
-        if (err) {
-          console.log(err);
-          res.status(500).send("Something went wrong.");
-        } else {
-          res.status(200).send("Email successfully sent to recipient!"); 
-        }
-      });
-    });
-    return res.redirect('http://localhost:3000/#home');
+    transporter.sendMail(mail, (err, data) => {
+      if (err) {
+        res.json({
+          status: 'fail'
+        })
+      } else {
+        res.json({
+         status: 'success'
+        })
+      }
+    })
   });

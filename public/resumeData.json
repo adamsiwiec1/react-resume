@@ -8,9 +8,9 @@
     "email": "adam@siwiectech.com",
     "phone": "571-291-1193",
     "github":"https://github.com/adamsiwiec1",
-    "linkedin":"https://github.com/nordicgiant2/react-nice-resume",
+    "linkedin":"https://www.linkedin.com/in/adam-siwiec-177b00150/",
     "address":{
-      "street":"3532 Coronado Drive",
+      "street":"11026 Legacy Drive",
       "city":"Sarasota",
       "state":"Florida",
       "zip": "34231"
@@ -25,19 +25,19 @@
       },
       {
         "name":"github",
-        "url":"https://github.com/nordicgiant2/react-nice-resume",
+        "url":"https://github.com/adamsiwiec1",
         "className":"fa fa-github"
       }
     ]
   },
   "resume":{
-    "skillmessage":"Here you can create a short write-up of your skills to show off to employers",
+    "skillmessage":"Here are some of my top skills.",
     "education":[
       {
         "school":"West Virginia University",
         "degree":"Management Information Systems",
         "graduated":"May 2021",
-        "description":"My time at WVU was a life changing experience. I not only aquired a good bit of knowledge reharding the interactions between technology and business, but the most important skill I gained was the ability to self learn. "
+        "description":"My time at WVU was a life changing experience. I not only aquired a good bit of knowledge regarding the interactions between technology and business, but the most important skill I gained was the ability to self learn. "
       },
       {
         "school":"AWS Cloud Practitioner",
